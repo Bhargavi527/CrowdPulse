@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+*.log
+
+# Virtual environments
+backend/venv/
+backend/ml/venv/
+.venv/
+venv/
+
+# Local env files
+.env
+backend/.env
+
+# Build / generated files
+dist/
+build/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Generated archives and temp folders
+*.zip
+_reference_ui/
+_zip_stage*/

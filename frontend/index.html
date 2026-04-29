@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CrowdPulse Real-Time Predictor</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Be+Vietnam+Pro:wght@500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="auth-shell" id="authShell">
+    <section class="auth-hero">
+      <div class="auth-brand">
+        <div class="logo-mark auth-logo">
+          <span class="logo-dot"></span>
+          <span class="logo-dot"></span>
+          <span class="logo-dot"></span>
+        </div>
+        <div>
+          <div class="hero-kicker">CrowdPulse</div>
+          <h1 class="auth-title">Crowd prediction that feels live, personal, and ready to use.</h1>
+          <p class="auth-copy">
+            Sign in to track places, compare future crowd windows, and improve accuracy with your own live check-ins.
+          </p>
+        </div>
+        <div class="auth-photo-stack">
+          <img class="auth-photo auth-photo-main" src="https://lh3.googleusercontent.com/aida/ADBb0uhJNqmFRADY7gGwabOElQaa7Btf-B9BGWIvJp61OP8kMFgYE0Q70r4Fn3YybcaTY1zo0fnqK4XKQnI4CuYFldKXrTgExoQT4jiKi_B17F9Jw1rzyr6DawsqudxXLU3Lm1JrcMSS3AmVkhD0L_kbuihQL3H525ttO2BdraprekIJezw6BV4XdIiQxNRMQ2d-yFyT7UWCF9fCJnNtKIcVSImFA7VJe7pY48XB0Qg5lv26omuZMcl9L3iSkao65n-FsAsr66qUPB7SEaE" alt="Illustration of a vibrant crowd community" />
+          <div class="auth-floating-card auth-floating-card-top">
+            <span class="pill-dot"></span>
+            4.2k live crowd signals
+          </div>
+          <div class="auth-floating-card auth-floating-card-bottom">
+            <strong>Human-first UI</strong>
+            <span>Photos, motion, and softer wayfinding</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-feature-grid">
+        <article class="hero-feature">
+          <div class="hero-feature-label">Real-Time</div>
+          <strong>Auto-refreshing predictions for the place you search</strong>
+        </article>
+        <article class="hero-feature">
+          <div class="hero-feature-label">Smarter Inputs</div>
+          <strong>Free-form place search instead of locked demo locations</strong>
+        </article>
+        <article class="hero-feature">
+          <div class="hero-feature-label">Better Accuracy</div>
+          <strong>Live check-ins, place-type tuning, and future date modeling</strong>
+        </article>
+      </div>
+    </section>
+
+    <section class="auth-panel">
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-auth-mode="login">Sign In</button>
+        <button class="auth-tab" data-auth-mode="signup">Sign Up</button>
+      </div>
+
+      <form class="auth-form active" id="loginForm">
+        <div class="auth-form-header">
+          <h2>Welcome back</h2>
+          <p>Pick up where you left off and keep your crowd tracking in one place.</p>
+        </div>
+        <label class="auth-field">
+          <span>Email</span>
+          <input type="email" id="loginEmail" placeholder="you@example.com" autocomplete="email" required />
+        </label>
+        <label class="auth-field">
+          <span>Password</span>
+          <input type="password" id="loginPassword" placeholder="Enter your password" autocomplete="current-password" required />
+        </label>
+        <button class="auth-submit" type="submit" id="loginSubmit">Sign In</button>
+      </form>
+
+      <form class="auth-form" id="signupForm">
+        <div class="auth-form-header">
+          <h2>Create your account</h2>
+          <p>Save your identity, sign in on return, and unlock live crowd collaboration.</p>
+        </div>
+        <label class="auth-field">
+          <span>Name</span>
+          <input type="text" id="signupName" placeholder="Your name" autocomplete="name" required />
+        </label>
+        <label class="auth-field">
+          <span>Email</span>
+          <input type="email" id="signupEmail" placeholder="you@example.com" autocomplete="email" required />
+        </label>
+        <label class="auth-field">
+          <span>Password</span>
+          <input type="password" id="signupPassword" placeholder="Create a password" autocomplete="new-password" required />
+        </label>
+        <button class="auth-submit" type="submit" id="signupSubmit">Create Account</button>
+      </form>
+    </section>
+  </div>
+
+  <div class="app-shell hidden" id="appShell">
+    <div class="app-brand-dock">
+      <button class="sidebar-toggle" id="sidebarToggle" title="Toggle menu">
+        <svg viewBox="0 0 24 24" width="20" height="20"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="brand-dock-copy">
+        <div class="logo-mark">
+          <span class="logo-dot"></span>
+          <span class="logo-dot"></span>
+          <span class="logo-dot"></span>
+        </div>
+        <div>
+          <div class="logo-title">CrowdPulse</div>
+          <div class="logo-sub">Real-Time Predictor</div>
+        </div>
+      </div>
+    </div>
+
+    <aside class="sidebar" id="sidebar">
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active" data-tab="dashboard">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="#" class="nav-item" data-tab="predict">
+          <svg viewBox="0 0 24 24"><path d="M3 12h3l3-8 4 16 3-8h5"/></svg>
+          <span>Predict</span>
+        </a>
+        <a href="#" class="nav-item" data-tab="heatmap">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+          <span>Heatmap</span>
+        </a>
+        <a href="#" class="nav-item" data-tab="analytics">
+          <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          <span>Analytics</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-status">
+        <div class="status-dot" id="wsStatus"></div>
+        <span id="wsStatusText">Connecting...</span>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <div class="search-wrapper">
+            <svg class="search-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="searchInput" class="search-input" placeholder="Search any place..." autocomplete="off" />
+            <button class="gps-btn" id="gpsBtn" title="Use my GPS location">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M1 12h4M19 12h4"/></svg>
+            </button>
+            <div class="search-results" id="searchResults"></div>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <div class="live-badge" id="liveBadge">
+            <span class="pulse-ring"></span>
+            <span>LIVE</span>
+          </div>
+          <div class="member-pill">
+            <div class="member-avatar" id="memberAvatar">CP</div>
+            <div class="member-copy">
+              <strong id="memberName">Guest</strong>
+              <span id="memberEmail">guest@example.com</span>
+            </div>
+            <button class="logout-btn" id="logoutBtn" title="Logout">
+              <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            </button>
+          </div>
+          <div class="time-display" id="timeDisplay"></div>
+        </div>
+      </header>
+
+      <div class="tab-content active" id="tab-dashboard">
+        <section class="intro-banner">
+          <div>
+            <p class="intro-label">Workspace</p>
+            <h2 id="welcomeTitle">Ready for your next crowd check?</h2>
+            <p id="welcomeText">Search a place to see its real-time crowd percentage and smarter visit advice.</p>
+          </div>
+          <div class="intro-meta">
+            <span class="intro-chip">Signed in</span>
+            <span class="intro-chip">Real-time mode</span>
+          </div>
+        </section>
+
+        <section class="human-strip">
+          <article class="human-spotlight">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDOvmV4ETB1eghoUc5lL_iyGqtwf8sKAgis1qQeMU493P36lrcZK1b9OHixjja_XJ02gkpT1EcQ_GDoY3U0nQ6U6q1kv8dBItfyw93Kgm-1JnrH9_wzvz4PD7GzLahBqItmtM0I9oKtWoFL6Uj1vT_ONip3yS2Jr0ySnRUEZui7wrvS_GYg6oZvoaePkGSnLCPFZBBWVTglZ6fhBzH1n7-Tyu8EykX-RrXRG6AZ90cDfxcITSZFRz7P0_6sqelGjxeti3rXE7s1Jw0r" alt="People moving through a public indoor space" />
+            <div class="human-spotlight-copy">
+              <p class="human-kicker">Movement Story</p>
+              <strong>See how places feel, not just how full they are.</strong>
+            </div>
+          </article>
+          <article class="human-spotlight compact">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuDbKG1negeh9KHAKWk53YbfCK0kTBdO-Ahx82cpWME8Fhu-FCibqsX6X3IvYFNSfCctzT8-78jTm2CSA7y5s61CoV1gOWJzMfUgV3aNrkMZM8cL7gTojsOga32OSLxPEkgIBJ7C_kFkfLWVx9WLiJE3YSRssmTWOkwwz9oXxYSO_y6tIY9u8L7GyIT31zg7WEFMCuwyZ6yUH8S-2HOGAsGwJ17rI9Qr2t7cx_95l1tEmFp-lV39Tqd9JIKsG6gnlAInRENGpKMHVPDy" alt="People gathered in a social public venue" />
+            <div class="human-spotlight-copy">
+              <p class="human-kicker">Visit Timing</p>
+              <strong>Choose a calmer hour before you step out.</strong>
+            </div>
+          </article>
+          <article class="human-spotlight compact">
+            <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0dO8HFXLe5hjpALD-xIZfqnAdrIJbcRJhWhiPB-y4WjjPi8mpHqEeab2ILeN-w04ekFzA3t8cUZocwo-5-8sZSjRt0uJxBze7gOJ5-DfVUy4OeMZl3T79qr3A9uS6diyNXtayaO6PqUB6v875Qrq9V4eN7u1_u3Ao6DpYPytVvVydmLNmS0dSvxzWW129T0zZG2mWxzc3XEZES2nn80gvEau4pbSYF0rHErbX-LCf_3-h_AJBrqA33vjF5MlLsPjRdV_EayI-U3Wm" alt="People clustered around an information hub" />
+            <div class="human-spotlight-copy">
+              <p class="human-kicker">Live Signals</p>
+              <strong>Check-ins help the model respond to what is happening now.</strong>
+            </div>
+          </article>
+        </section>
+
+        <div class="stats-row">
+          <div class="stat-card">
+            <div class="stat-label">Current Crowd</div>
+            <div class="stat-value" id="statCrowdVal">-</div>
+            <div class="stat-sub" id="statCrowdSub">Search for a place to start</div>
+            <div class="stat-bar"><div class="stat-bar-fill" id="statCrowdBar"></div></div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Estimated People</div>
+            <div class="stat-value" id="statPeopleVal">-</div>
+            <div class="stat-sub" id="statPeopleSub">of capacity</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Crowd Level</div>
+            <div class="stat-value level-badge" id="statLevelVal">-</div>
+            <div class="stat-sub" id="statLevelSub">-</div>
+          </div>
+          <div class="stat-card checkin-card">
+            <div class="stat-label">Live Check-In</div>
+            <button class="checkin-btn" id="checkinBtn" disabled>
+              <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              I'm Here Now
+            </button>
+            <div class="stat-sub" id="checkinSub">Search a place first</div>
+          </div>
+        </div>
+
+        <div class="map-gauge-row">
+          <div class="map-card">
+            <div class="card-header">
+              <span class="card-title">Selected Place Map</span>
+              <span class="card-badge">User Entered</span>
+            </div>
+            <div id="map"></div>
+            <div class="map-legend">
+              <span>Crowd:</span>
+              <span class="leg-dot" style="background:#22c55e"></span>Low
+              <span class="leg-dot" style="background:#f59e0b"></span>Moderate
+              <span class="leg-dot" style="background:#f97316"></span>High
+              <span class="leg-dot" style="background:#ef4444"></span>Very High
+            </div>
+          </div>
+
+          <div class="gauge-card">
+            <div class="card-header">
+              <span class="card-title">Crowd Meter</span>
+            </div>
+            <div class="gauge-wrapper">
+              <canvas id="gaugeCanvas" width="240" height="240"></canvas>
+              <div class="gauge-center">
+                <div class="gauge-pct" id="gaugePct">-</div>
+                <div class="gauge-label" id="gaugeLabel">No data</div>
+              </div>
+            </div>
+            <div class="gauge-info">
+              <div class="info-row">
+                <span>Location</span>
+                <strong id="infoLocation">-</strong>
+              </div>
+              <div class="info-row">
+                <span>Updated</span>
+                <strong id="infoUpdated">-</strong>
+              </div>
+              <div class="info-row">
+                <span>Advice</span>
+                <strong id="infoAdvice">-</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="card-header">
+            <span class="card-title">24-Hour Real-Time Forecast</span>
+            <span class="card-badge" id="historyLocation">-</span>
+          </div>
+          <canvas id="historyChart" height="80"></canvas>
+          <div class="chart-empty" id="historyEmpty">Search a place to see its live crowd curve</div>
+        </div>
+      </div>
+
+      <div class="tab-content" id="tab-predict">
+        <div class="predict-layout">
+          <div class="predict-form-card">
+            <div class="card-header">
+              <span class="card-title">Future Crowd Prediction</span>
+              <span class="card-badge">Groq Ready</span>
+            </div>
+            <p class="predict-desc">
+              Enter any place, pick a date and hour, and get its predicted crowd percentage with a 24-hour view.
+            </p>
+            <div class="form-group">
+              <label>Location</label>
+              <div class="predict-search-wrapper">
+                <input type="text" id="predictLocation" class="form-input" placeholder="Type any place..." autocomplete="off" />
+                <div class="search-results" id="predictResults"></div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Date</label>
+                <input type="date" id="predictDate" class="form-input" />
+              </div>
+              <div class="form-group">
+                <label>Time</label>
+                <select id="predictHour" class="form-input"></select>
+              </div>
+            </div>
+            <button class="predict-btn" id="predictBtn">
+              <svg viewBox="0 0 24 24" width="18" height="18"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+              Generate Prediction
+            </button>
+
+            <div class="predict-result" id="predictResult" style="display:none">
+              <div class="result-header">
+                <div class="result-pct" id="resultPct">-</div>
+                <div>
+                  <div class="result-level" id="resultLevel">-</div>
+                  <div class="result-advice" id="resultAdvice">-</div>
+                </div>
+              </div>
+              <div class="best-time-box" id="bestTimeBox">-</div>
+            </div>
+          </div>
+
+          <div class="predict-chart-card">
+            <div class="card-header">
+              <span class="card-title">24-Hour Forecast</span>
+              <span class="card-badge" id="predictChartDate">-</span>
+            </div>
+            <canvas id="predictChart" height="300"></canvas>
+            <div class="chart-empty" id="predictEmpty">Run a prediction to see the hourly breakdown</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-content" id="tab-heatmap">
+        <div class="heatmap-header">
+          <div>
+            <h2 class="section-title">Live Heatmap</h2>
+            <p class="section-sub">Backend live references and anonymous GPS check-ins</p>
+          </div>
+          <button class="refresh-btn" id="refreshHeatmap">
+            <svg viewBox="0 0 24 24" width="16" height="16"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+            Refresh
+          </button>
+        </div>
+        <div id="heatmapContainer">
+          <div id="heatmap"></div>
+        </div>
+        <section class="heatmap-story">
+          <div class="heatmap-story-copy">
+            <p class="human-kicker">Crowd Context</p>
+            <h3>Numbers make more sense when the interface feels human.</h3>
+            <p>Use the heatmap to compare pressure points, then switch back to the dashboard for one place at a time.</p>
+          </div>
+          <img src="https://lh3.googleusercontent.com/aida-public/AB6AXuAiVBTyRtvf9XlIibKC-BPA0-KGa3rzvca52mjiKlhED7Mq08m3vEUxGPj6qmI0uLebkJ6VGTzgNQbjRUcYUHHCbit56OceFnA6Eve17nF3HvmXXpIMdJvni2RyyPcOTDGsQV2XNP_guClqy9R20KgPOx2VLuK8dafJ_icoO4OPlrT2q4Aveg2--xghRdRC9NgY8yLddZjb4LdqurX137UCR1x0TY1pLdtebArluzXRqqelUUqVw8eNfn3yHcAavO6n24dzXXfKcLW5" alt="People walking through a bright public atrium" />
+        </section>
+        <div class="location-cards" id="locationCards"></div>
+      </div>
+
+      <div class="tab-content" id="tab-analytics">
+        <div class="analytics-grid">
+          <div class="analytics-card">
+            <div class="card-header">
+              <span class="card-title">Hourly Profile</span>
+            </div>
+            <canvas id="peakChart" height="200"></canvas>
+            <p class="chart-empty" id="peakEmpty">Choose a place from Dashboard first</p>
+          </div>
+          <div class="analytics-card">
+            <div class="card-header">
+              <span class="card-title">Week Pattern</span>
+            </div>
+            <canvas id="weekChart" height="200"></canvas>
+            <p class="chart-empty" id="weekEmpty">Choose a place from Dashboard first</p>
+          </div>
+          <div class="analytics-card wide">
+            <div class="card-header">
+              <span class="card-title">Best Visit Times</span>
+              <span class="card-badge" id="bestTimesLocation">-</span>
+            </div>
+            <div class="best-times-grid" id="bestTimesGrid">
+              <p style="color:var(--muted);font-size:14px">Live recommendations appear after you search a place.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
