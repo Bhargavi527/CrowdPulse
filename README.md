@@ -1,4 +1,5 @@
 # CrowdPulse
+<<<<<<< HEAD
 
 CrowdPulse is a full-stack crowd prediction prototype that blends real-time signals, future forecasting, location search, live check-ins, and a more human-centered interface for exploring crowded public places.
 
@@ -211,3 +212,6 @@ git push -u origin main
 ## Author
 
 Built by Bhargavi as a full-stack prototype focused on real-time prediction, usable UI, and recruiter-visible product polish.
+=======
+Full-stack crowd prediction app with real-time updates, future forecasting, interactive maps, and live check-ins.  CrowdPulse helps users check how busy places are now or later using real-time signals, forecasting, and an intuitive UI.  A full-stack  app for real-time crowd tracking, place search, forecasting, and heatmap-based insights.
+>>>>>>> c7c45a460a590537a17f7bb71a7834b911356a7b
