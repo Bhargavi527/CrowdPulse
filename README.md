@@ -189,7 +189,7 @@ git init
 git add .
 git commit -m "Initial commit: CrowdPulse full-stack prototype"
 git branch -M main
-git remote add origin https://github.com/YOUR_USERNAME/CrowdPulse.git
+git remote add origin https://github.com/Bhargavi527/CrowdPulse
 git push -u origin main
 ```
 
